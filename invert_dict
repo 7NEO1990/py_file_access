@@ -1,0 +1,64 @@
+def create_dict_from_txt(file_path, delimiter=":"","):
+
+  result_dict = {}#sets empty dict to store text file dictionary
+  try:#trys to open file
+      with open(file_path, 'r') as file:#with texs
+          for line in file:
+              line = line.strip()
+              #sets line to stripped line(makes split more reliable)
+              if not line:#if line is empty   continue
+                  continue
+
+              key, value = line.split(delimiter, 1)
+              key = key.strip()
+              value = value.strip()
+
+              result_dict[key] = value
+
+  except FileNotFoundError:#eception for file not found
+      print(f"The file {file_path} does not exist.")#tells user if file does not exist
+  except Exception as e:#if error occurs
+      print(f"An error occurred: {e}")
+
+  return result_dict#returns the dictionary converted from text file.
+
+def invert_dictionary(original_dict):
+  inverted_dict = {}
+  for key, value in original_dict.items():#loops over original dictionary
+      #strips the key and value
+      values = [v.strip() for v in value.split(',')]
+      #iterates over the values.
+      for val in values:
+          if val in inverted_dict:
+              inverted_dict[val].append(key)
+          else:
+              inverted_dict[val] = [key]
+
+  return inverted_dict
+
+def write_dict_to_txt(dictionary, file_path, delimiter=":"):
+
+  try:
+      with open(file_path, 'w') as file:
+          for key, values in dictionary.items():
+              values_str = ", ".join(values)
+              file.write(f"{key}{delimiter} {values_str}\n")
+  except Exception as e:
+      print(f"An error occurred: {e}")
+
+
+input_file_path = 'original_dict.txt'  # Defines Input file path
+output_file_path = 'inverted_dict.txt'  # Output file path
+delimiter = ':'  # Delimiter used in the files to seperate key-value pairs
+
+original_dict = create_dict_from_txt(input_file_path, delimiter)
+print("Original Dictionary:")
+print(original_dict)
+
+
+inverted_dict = invert_dictionary(original_dict)
+print("Inverted Dictionary:")
+print(inverted_dict)
+
+write_dict_to_txt(inverted_dict, output_file_path, delimiter)
+print(f"Inverted dictionary has been written to {output_file_path}.")
